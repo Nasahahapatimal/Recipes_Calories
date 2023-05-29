@@ -31,8 +31,22 @@ class Recepti:
         self.con.commit()
         cursor.close()
 
-    def dodaj_recept(self):
-        pass
+    def dodaj_recept(self, NazivRecepta, *values):
+        cursor = self.con.cursor()
+
+        rec = "INSERT INTO RECEPT(NazivRecepta) VALUES ('{}')".format(NazivRecepta)
+        cursor.execute(rec)
+        self.con.commit()
+
+        attribute_names = ['Namirnica', 'JedinicaMere', 'Kolicina']
+
+        for index, value in enumerate(values, start=1):
+            attribute_name = attribute_names[index % len(attribute_names) - 1] + str((index + 2) // 3)
+            update_query = "UPDATE RECEPT SET {} = '{}' WHERE NazivRecepta = '{}'".format(attribute_name, value, NazivRecepta)
+            cursor.execute(update_query)
+            self.con.commit()
+
+        cursor.close()
 
     def ocitaj_kalorije(self):
         return self.namirnice_df.iloc[0:][["nazivnamirnice","kalorije"]].to_string(index=False,header=False)
@@ -42,11 +56,11 @@ rec = Recepti()
 rec.import_from_sql()
 
 print(rec.namirnice_df)
-# print(rec.recepti_df)
+
 rec.lista_svega()
-print(rec.namirnica)
-print(rec.kalorije)
+# print(rec.namirnica)
+# print(rec.kalorije)
 # rec.dodaj_namirnicu('Čia Seme','gr',100,372)
 # rec.dodaj_namirnicu('Laneno Seme','gr',100,543)
-print(rec.namirnica)
-print(rec.ocitaj_kalorije())
+# print(rec.namirnica)
+# print(rec.ocitaj_kalorije())
