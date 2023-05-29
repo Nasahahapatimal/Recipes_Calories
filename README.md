@@ -1,2 +1,2 @@
 #Header 1
-This is final exame fot the advance Python course at IT:OiP
+This is final exam for the advance Python course at IT:OiP
