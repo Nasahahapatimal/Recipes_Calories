@@ -58,6 +58,7 @@ rec.import_from_sql()
 print(rec.namirnice_df)
 
 rec.lista_svega()
+#dffdf
 # print(rec.namirnica)
 # print(rec.kalorije)
 # rec.dodaj_namirnicu('Čia Seme','gr',100,372)
