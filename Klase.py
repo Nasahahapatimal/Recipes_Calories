@@ -88,25 +88,62 @@ class Recepti:
     def ocitaj_kalorije_recept(self,recept):
 
         NamirnicaX = self.recepti_df.columns[1:len(self.recepti_df.columns):3].to_list()
+        JedinicaMereX = self.recepti_df.columns[2:len(self.recepti_df.columns):3].to_list()
         KolicinaX = self.recepti_df.columns[3:len(self.recepti_df.columns):3].to_list()
         Kalorije = []
+        Namirnica = []
+        Kolicina = []
+        JedinicaMere = []
+        Kalorijska_vrednost_recepta = 0
 
         if recept in self.recepti_df["nazivrecepta"].values:
             
             filtered_row = self.recepti_df.loc[self.recepti_df["nazivrecepta"] == recept].dropna(axis=1)
             filtered_row = filtered_row.replace({pd.NA: ''})
-            print(filtered_row)
+            # print(filtered_row)
 
             for x in NamirnicaX:
                 if x in filtered_row:
+                        
                         kalorija = (self.namirnice_df.loc[self.namirnice_df["nazivnamirnice"] == filtered_row[x].values[0],"kalorije"]).values[0]
                         Kalorije.append(kalorija)
-                        #dodaj sada i za količinu i to sve stavi u jednu pandu i pomnoži.
-                        #za sve ostale recepte umesto (self,recept) ---- (self,lista svih recepata - izvuci iz funkcije)
 
-        return(Kalorije)
+                        namirnica = filtered_row[x].values[0]
+                        Namirnica.append(namirnica)
 
+            for y in KolicinaX:
+                    if y in filtered_row:
+                        kolicina = filtered_row[y].values[0]
+                        Kolicina.append(kolicina)
+            
+            for z in JedinicaMereX:
+                    if z in filtered_row:
+                        Mera = filtered_row[z].values[0]
+                        JedinicaMere.append(Mera)
 
+        vrednosti_df = pd.DataFrame({"Namirnica":Namirnica,"Kolicina":Kolicina,"Kalorije":Kalorije,"Jedinica Mere":JedinicaMere})
+
+        for index, row in vrednosti_df.iterrows():
+            if row["Jedinica Mere"] == "komad":
+                kalorijska_vrednost = row["Kolicina"] * row["Kalorije"]
+                Kalorijska_vrednost_recepta = Kalorijska_vrednost_recepta + kalorijska_vrednost
+            elif row["Jedinica Mere"] == "gr":
+                 kalorijska_vrednost = row["Kolicina"]/100 * row["Kalorije"]
+                 Kalorijska_vrednost_recepta = Kalorijska_vrednost_recepta + kalorijska_vrednost
+        # print("Kalorijska vrednost recepta {} je {} cal.".format(recept.lower(),Kalorijska_vrednost_recepta))
+        return Kalorijska_vrednost_recepta
+
+    def ocitaj_kalorije_svi_recepti(self,recepti = []):
+         
+        recepti = self.recepti_df["nazivrecepta"]
+        print(recepti)
+        a = []
+
+        for x in recepti:
+            cal = self.ocitaj_kalorije_recept(x)
+            a.append(cal)
+        print(a)
+            
 rec = Recepti()
 rec.import_from_sql()
 # rec.lista_svega()
@@ -120,5 +157,7 @@ rec.import_from_sql()
 
 # print(rec.ocitaj_kalorije_recept("Krompir"))
 # print(rec.recepti_df)
-print(rec.ocitaj_kalorije_recept("Gulas"))
-# rec.dodaj_recept("Gulas","Jaja","komad",10,"Krompir","gr",880)
+print(rec.ocitaj_kalorije_svi_recepti())
+# # print(rec.ocitaj_kalorije_recept("Gulas"))
+# rec.dodaj_recept("Pihtije","Jaja","komad",5,"Krompir","gr",900,"Jogurt","gr",400)
+# rec.obrisi_recept("Pihtije")
