@@ -1,5 +1,6 @@
 import psycopg2 as pg
 import pandas as pd
+import matplotlib.pyplot as plt 
 
 class Recepti:
 
@@ -133,22 +134,56 @@ class Recepti:
         # print("Kalorijska vrednost recepta {} je {} cal.".format(recept.lower(),Kalorijska_vrednost_recepta))
         return Kalorijska_vrednost_recepta
 
-    def ocitaj_kalorije_svi_recepti(self,recepti = []):
+    def ocitaj_kalorije_svi_recepti(self):
          
         recepti = self.recepti_df["nazivrecepta"]
-        print(recepti)
+        recept_list = []
         a = []
 
         for x in recepti:
+
             cal = self.ocitaj_kalorije_recept(x)
             a.append(cal)
-        print(a)
-            
+            recept_list.append(x)
+# 
+        spisak = pd.DataFrame({"Naziv recepta":recept_list,"Kalorijska vrednost":a})
+        return(spisak)
+    
+    def plot_kalorije_recepti(self):
+         
+        spisak = self.ocitaj_kalorije_svi_recepti()
+        names = spisak["Naziv recepta"]
+        values = spisak["Kalorijska vrednost"]
+        autopct_labels = ["{} ({} cal)".format(name, value) for name, value in zip(names, values)]
+
+        plt.pie(values,labels=autopct_labels,autopct="%1.0f%%")
+        plt.title("Kalorijska vrednost recepta")
+        plt.show()
+
+    def plot_kalorije_namirnice(self):
+         
+         names = self.namirnice_df["nazivnamirnice"]
+         values = self.namirnice_df["kalorije"]
+
+         plt.bar(names,values,width=0.2)
+         plt.show()
+
+    def export_to_xlsx_namirnice(self):
+         
+        columns = ["nazivnamirnice","kalorije"]
+        self.namirnice_df[columns].to_excel("namirnice.xlsx", index=False)
+
+    def export_to_xlsx_recepti(self):
+         
+        columns = ["Naziv recepta","Kalorijska vrednost"]
+        self.ocitaj_kalorije_svi_recepti()[columns].to_excel("recepti.xlsx", index=False)
+    
+
 rec = Recepti()
 rec.import_from_sql()
 # rec.lista_svega()
 #dffdf
-# print(rec.namirnica)
+# print(rec.namirnice_df)
 # print(rec.kalorije)
 # rec.dodaj_namirnicu('Čia Seme','gr',100,372)
 # rec.dodaj_namirnicu('Laneno Seme','gr',100,543)
@@ -158,6 +193,10 @@ rec.import_from_sql()
 # print(rec.ocitaj_kalorije_recept("Krompir"))
 # print(rec.recepti_df)
 print(rec.ocitaj_kalorije_svi_recepti())
+# rec.plot_kalorije_recepti()
 # # print(rec.ocitaj_kalorije_recept("Gulas"))
 # rec.dodaj_recept("Pihtije","Jaja","komad",5,"Krompir","gr",900,"Jogurt","gr",400)
 # rec.obrisi_recept("Pihtije")
+
+# rec.plot_kalorije_namirnice()
+# rec.export_to_xlsx_recepti()
