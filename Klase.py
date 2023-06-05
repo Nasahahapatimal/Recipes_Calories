@@ -211,6 +211,9 @@ class Recepti:
         if a == "OK":
             return ("Uspesno ste uradili operaciju.")
 
+    def print(self):
+        pass
+
 
 rec = Recepti()
 rec.import_from_sql()
