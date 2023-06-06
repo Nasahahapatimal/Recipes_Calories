@@ -2,6 +2,7 @@ import psycopg2 as pg
 import pandas as pd
 import matplotlib.pyplot as plt
 import pyautogui as pg1
+import customtkinter
 
 
 class Recepti:
@@ -29,6 +30,18 @@ class Recepti:
 
         self.namirnica = self.namirnice_df.iloc[:, 0].to_list()
         self.kalorije = self.namirnice_df.iloc[:, 3].to_list()
+
+    def list_box_recepti(self):
+
+        cursor = self.con.cursor()
+        cursor.execute('SELECT * FROM RECEPT')
+
+        rows = cursor.fetchall()
+
+        for row in rows:
+            
+            print(row)
+            print(len(row))
 
     def dodaj_namirnicu(self, NazivNamirnice, JedinicaMere, Kolicina, Kalorije):
 
@@ -239,4 +252,6 @@ rec.lista_svega()
 
 # rec.auto_box("Gulas")
 # rec.auto_box_comfirmation()
-print(rec.potvrda())
+# print(rec.potvrda())
+rec.list_box_recepti()
+print(rec.recepti_df)
