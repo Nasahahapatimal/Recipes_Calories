@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import pyautogui as pg1
 import customtkinter
+import tkinter as tk
 
 
 class Recepti:
@@ -89,7 +90,7 @@ class Recepti:
 
         cursor = self.con.cursor()
         del_rec = "DELETE FROM RECEPT WHERE NazivRecepta = '{}'".format(
-            NazivRecepta.capitalize())
+            NazivRecepta)
         cursor.execute(del_rec)
         self.con.commit()
         cursor.close()
@@ -244,7 +245,7 @@ rec.lista_svega()
 # print(rec.ocitaj_kalorije_svi_recepti())
 # rec.plot_kalorije_recepti()
 # # print(rec.ocitaj_kalorije_recept("Gulas"))
-# rec.dodaj_recept("Pihtije","Jaja","komad",5,"Krompir","gr",900,"Jogurt","gr",400)
+# rec.dodaj_recept("Buhtla","Jaja","komad",5,"Krompir","gr",900,"Jogurt","gr",400,"Beli pirinac","gr",1500)
 # rec.obrisi_recept("Pihtije")
 
 # rec.plot_kalorije_namirnice()
