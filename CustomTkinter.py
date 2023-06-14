@@ -49,6 +49,13 @@ def list_box_recept():
             print(selected_value)
             rec.obrisi_recept(selected_value)
 # ------------------------------------------------------------------------------------------------------------------------------
+    def select_value():
+        selected_indices = listbox.curselection()
+        if selected_indices:
+            selected_recipe = selected_indices[0]  # Assuming only one item is selected
+            selected_value = listbox.get(selected_recipe)
+            return selected_value
+# ------------------------------------------------------------------------------------------------------------------------------
     def info_recipe():
         selected_indices = listbox.curselection()
         print(selected_indices)
@@ -132,8 +139,14 @@ def list_box_recept():
     b_t1 = customtkinter.CTkButton(frame2,text = "Sastojci recepta",command = lambda:l_t.configure(text = info_recipe()))
     b_t1.pack(padx=5, pady=5)
 
-    b_t2 = customtkinter.CTkButton(frame2,text = "Dodaj recept",command=lambda:dodaj_recept())
-    b_t2.pack(padx=5, pady=5)
+    b1_t1 = customtkinter.CTkButton(frame2,text = "Dodaj recept",command=lambda:dodaj_recept())
+    b1_t1.pack(padx=5, pady=5)
+
+    b2_t1 = customtkinter.CTkButton(frame2,text = "Recept - kalorije",command=lambda:l_t.configure(text = rec.ocitaj_kalorije_recept(select_value())))
+    b2_t1.pack(padx=5, pady=5)
+
+    b3_t1 = customtkinter.CTkButton(frame2,text = "Svi recepti - kalorije",command=lambda:l_t.configure(text = rec.ocitaj_kalorije_svi_recepti()))
+    b3_t1.pack(padx=5, pady=5)
 
     l_t = customtkinter.CTkLabel(frame3,text = "")
     l_t.pack(padx=5, pady=5)
