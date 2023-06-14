@@ -5,7 +5,8 @@ customtkinter.set_default_color_theme("green")
 
 root = customtkinter.CTk()
 root.title("Recepti")
-root.geometry("400x220")
+root.geometry("400x280")
+
 
 frame = customtkinter.CTkFrame(root,fg_color = "transparent")
 frame.pack(side = "top", padx=30, pady=30)
@@ -16,8 +17,11 @@ b_1.grid(row=0, column=0, padx=10, pady=10)
 b_2 = customtkinter.CTkButton(frame, text="Namirnice",command=lambda:namirnice())
 b_2.grid(row=1, column=0, padx=10, pady=10)
 
-b_3 = customtkinter.CTkButton(frame, text="Grafici")
+b_3 = customtkinter.CTkButton(frame, text="Grafici",command=lambda:grafici())
 b_3.grid(row=2, column=0, padx=10, pady=10)
+
+b_4 = customtkinter.CTkButton(frame, text="Export",command=lambda:export())
+b_4.grid(row=3, column=0, padx=10, pady=10)
 
 #--------------------------------------------------------------------------------------------------------------------------------------------------------------#
 def list_box_recept():
@@ -106,7 +110,7 @@ def list_box_recept():
         add_entry_button = customtkinter.CTkButton(frame6, text="Dodaj novi sastojak", command=lambda:add_entry())
         add_entry_button.grid(row=1, column=0, padx=3, pady=3, sticky="ew")
 #--------------------------------------------------------------------------------------------------------------------------------------------------------------#
-        b = customtkinter.CTkButton(frame5, text="Dodaj recept", command=lambda:rec.dodaj_recept(e_t1.get(),*[x.get() for x in entries]))
+        b = customtkinter.CTkButton(frame6, text="Dodaj recept", command=lambda:rec.dodaj_recept(e_t1.get(),*[x.get() for x in entries]))
         b.grid(row=2, column=0, padx=3, pady=3, sticky="ew")
 #--------------------------------------------------------------------------------------------------------------------------------------------------------------#
         l1_t1 = customtkinter.CTkLabel(frame5, text="Ime sastojka")
@@ -166,6 +170,15 @@ def namirnice():
     for index,row in rec.namirnice_df.iterrows():
         row_text = row[0]
         listbox_nam.insert(tk.END, row_text)
+    
+    def update_listbox_namirnice():
+        listbox_nam.delete(0,END)
+        for index,row in rec.namirnice_df.iterrows():
+            row_text = row[0]
+            listbox_nam.insert(END, row_text)
+        return listbox_nam
+    
+    update_listbox_namirnice()
 
     frame2 = customtkinter.CTkFrame(t2,fg_color = "transparent",width=200,height=200)
     frame2.place(relx = 0.45,rely=0)
@@ -173,10 +186,10 @@ def namirnice():
     frame3 = customtkinter.CTkFrame(t2,fg_color = "transparent",width=200,height=200)
     frame3.place(relx = 0,rely=0.5)
 
-    b_t2 = customtkinter.CTkButton(frame2,text = "Obrisi namirnicu",command=lambda:delete_selected_namirnica())
-    b_t2.pack(padx=5, pady=5)
+    b0_t2 = customtkinter.CTkButton(frame2,text = "Obrisi namirnicu",command=lambda:[delete_selected_namirnica(),update_listbox_namirnice()])
+    b0_t2.pack(padx=5, pady=5)
 
-    b_t2 = customtkinter.CTkButton(frame2,text = "Dodaj namirnicu",command=lambda:dodaj_namirnicu())
+    b_t2 = customtkinter.CTkButton(frame2,text = "Dodaj namirnicu",command=lambda:[dodaj_namirnicu(),update_listbox_namirnice()])
     b_t2.pack(padx=5, pady=5)
 
     b1_t2 = customtkinter.CTkButton(frame2,text = "Kalorije - namirnica",command=lambda:l_t2.configure(text = rec.ocitaj_kalorije_namirnica(select_value_namirnica())))
@@ -204,7 +217,7 @@ def namirnice():
         frame1 = customtkinter.CTkFrame(t3,fg_color = "transparent")
         frame1.pack(side="top", padx=5, pady=5)
 
-        b = customtkinter.CTkButton(frame1, text="Dodaj namirnicu",command=lambda:rec.dodaj_namirnicu(e_t3.get(),combobox_unit.get(),combobox_amount.get(),e1_t3.get()))
+        b = customtkinter.CTkButton(frame1, text="Dodaj namirnicu",command=lambda:[(rec.dodaj_namirnicu(e_t3.get(),combobox_unit.get(),combobox_amount.get(),e1_t3.get())),(update_listbox_namirnice())])
         b.grid(row=2, column=0, padx=3, pady=3, sticky="ew")
 
         l1_t3 = customtkinter.CTkLabel(frame1, text="Naziv Namirnice")
@@ -230,7 +243,6 @@ def namirnice():
 
         e1_t3 = customtkinter.CTkEntry(frame1,  width=150)
         e1_t3.grid(row=1, column=3, padx=3, pady=3, sticky="ew")
-
 #--------------------------------------------------------------------------------------------------------------------------------------------------------------#
     def select_value_namirnica():
         selected_indices = listbox_nam.curselection()
@@ -238,18 +250,55 @@ def namirnice():
             selected_ingredient = selected_indices[0]  # Assuming only one item is selected
             selected_value = listbox_nam.get(selected_ingredient)
             return selected_value
+#--------------------------------------------------------------------------------------------------------------------------------------------------------------#
+#--------------------------------------------------------------------------------------------------------------------------------------------------------------#
+#--------------------------------------------------------------------------------------------------------------------------------------------------------------#
+def grafici():
+    t4 = customtkinter.CTkToplevel(root)
+    t4.geometry("300x150")
 
+    frame1 = customtkinter.CTkFrame(t4,fg_color = "transparent",width=20,height=20)
+    frame1.pack(side="top", padx=5, pady=5)
 
+    b_t4 = customtkinter.CTkButton(frame1,text = "Plot kalorija namirnica",command=lambda:[rec.plot_kalorije_namirnice()])
+    b_t4.pack(padx=5, pady=5)
 
+    b1_t4 = customtkinter.CTkButton(frame1,text = "Plot kalorija recepata",command=lambda:rec.plot_kalorije_recepti())
+    b1_t4.pack(padx=5, pady=5)
+#--------------------------------------------------------------------------------------------------------------------------------------------------------------#
+#--------------------------------------------------------------------------------------------------------------------------------------------------------------#
+#--------------------------------------------------------------------------------------------------------------------------------------------------------------#
+def export():
+    t4 = customtkinter.CTkToplevel(root)
+    t4.geometry("300x150")
 
+    frame1 = customtkinter.CTkFrame(t4,fg_color = "transparent",width=20,height=20)
+    frame1.pack(side="top", padx=5, pady=5)
 
+    b_t4 = customtkinter.CTkButton(frame1,text = "Export to .xlsx - Recepti",command=lambda:[rec.export_to_xlsx_recepti()])
+    b_t4.pack(padx=5, pady=5)
 
+    b1_t4 = customtkinter.CTkButton(frame1,text = "Export to .xlsx - Namirnice",command=lambda:rec.export_to_xlsx_namirnice())
+    b1_t4.pack(padx=5, pady=5)
 
-    
-    # DODAJ DIREKTNI UPDATE SA SQL
-    
+    b2_t4 = customtkinter.CTkButton(frame1,text = "Export to .json - Recepti",command=lambda:rec.export_to_json_recepti())
+    b2_t4.pack(padx=5, pady=5)
 
+def potvrda():
+    a = pg1.confirm("Are you sure?")
+    if a == "OK":
+        root.destroy()
+    else:
+        pass
 
-    
+def exit_command():
+    potvrda()
+
+menubar = tk.Menu(master=root)
+menubar = tk.Menu(menubar, tearoff=0)
+menubar.add_command(label="Exit", command=exit_command)
+
+root.configure(menu=menubar)
+
 
 root.mainloop()

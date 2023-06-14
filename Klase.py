@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import pyautogui as pg1
 import customtkinter
 import tkinter as tk
+from tkinter import END
 
 
 class Recepti:
@@ -31,6 +32,14 @@ class Recepti:
 
         self.namirnica = self.namirnice_df.iloc[:, 0].to_list()
         self.kalorije = self.namirnice_df.iloc[:, 3].to_list()
+
+    def lista_namirnica(self):
+        self.sve_namirnice = self.namirnice_df.iloc[:, 0]
+        return self.sve_namirnice.to_list()
+    
+    def lista_recepata(self):
+        self.svi_recepti = self.recepti_df.iloc[:, 0]
+        return self.svi_recepti.to_list()
 
     def list_box_recepti(self):
 
@@ -170,7 +179,6 @@ class Recepti:
         a = []
 
         for x in recepti:
-
             cal = self.ocitaj_kalorije_recept(x)
             a.append(cal)
             recept_list.append(x)
@@ -209,6 +217,10 @@ class Recepti:
         columns = ["Naziv recepta", "Kalorijska vrednost"]
         self.ocitaj_kalorije_svi_recepti()[columns].to_excel(
             "recepti.xlsx", index=False)
+    
+    def export_to_json_recepti(self):
+        columns = ["Naziv recepta", "Kalorijska vrednost"]
+        self.ocitaj_kalorije_svi_recepti()[columns].to_json("recepti.json")
 
     def auto_box_stampa(self, recept):
 
@@ -217,45 +229,13 @@ class Recepti:
 
     def auto_box_comfirmation(self):
 
-        return pg1.confirm("This is...")
+        return pg1.confirm("Are you sure?")
 
     def potvrda(self):
 
         a = self.auto_box_comfirmation()
         if a == "OK":
             return ("Uspesno ste uradili operaciju.")
-
-    def print(self):
-        pass
-
-
+        
 rec = Recepti()
 rec.import_from_sql()
-rec.lista_svega()
-# dffdf
-# print(rec.namirnice_df)
-# print(rec.kalorije)
-# rec.dodaj_namirnicu('Čia Seme','gr',100,372)
-# rec.dodaj_namirnicu('Laneno Seme','gr',100,543)
-# print(rec.namirnica)
-# print(rec.ocitaj_kalorije())
-
-# print(rec.ocitaj_kalorije_recept("Krompir"))
-# print(rec.recepti_df)
-# print(rec.ocitaj_kalorije_svi_recepti())
-# rec.plot_kalorije_recepti()
-# # print(rec.ocitaj_kalorije_recept("Gulas"))
-# rec.dodaj_recept("Buhtla","Jaja","komad",5,"Krompir","gr",900,"Jogurt","gr",400,"Beli pirinac","gr",1500)
-# rec.obrisi_recept("Pihtije")
-
-# rec.plot_kalorije_namirnice()
-# rec.export_to_xlsx_recepti()
-
-# rec.auto_box("Gulas")
-# rec.auto_box_comfirmation()
-# print(rec.potvrda())
-rec.list_box_recepti()
-
-# print(rec.recepti_df)
-# print(list(set(rec.namirnice_df["jedinicamere"].to_list())))
-print(rec.namirnice_df)
