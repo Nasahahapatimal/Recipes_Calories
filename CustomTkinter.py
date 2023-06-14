@@ -9,22 +9,21 @@ root.geometry("400x220")
 
 frame = customtkinter.CTkFrame(root,fg_color = "transparent")
 frame.pack(side = "top", padx=30, pady=30)
-# ------------------------------------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------------------------------------------------------------#
 b_1 = customtkinter.CTkButton(frame, text="Recepti",command=lambda:list_box_recept())
 b_1.grid(row=0, column=0, padx=10, pady=10)
 
-b_2 = customtkinter.CTkButton(frame, text="Namirnice")
+b_2 = customtkinter.CTkButton(frame, text="Namirnice",command=lambda:namirnice())
 b_2.grid(row=1, column=0, padx=10, pady=10)
 
 b_3 = customtkinter.CTkButton(frame, text="Grafici")
 b_3.grid(row=2, column=0, padx=10, pady=10)
 
-# ------------------------------------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------------------------------------------------------------#
 def list_box_recept():
 
     t = customtkinter.CTkToplevel(root)
     t.geometry("650x350")
-
     frame1 = customtkinter.CTkFrame(t,fg_color = "transparent",width=20,height=20)
     frame1.place(relx = 0,rely = 0)
 
@@ -35,12 +34,31 @@ def list_box_recept():
     frame3.place(relx = 0,rely=0.5)
 
     listbox = tk.Listbox(frame1, selectmode=tk.MULTIPLE,width=20)
+    listbox.pack()
+    
+    b_t = customtkinter.CTkButton(frame2,text = "Obrisi recept",command = lambda:rec.obrisi_recept(delete_selected()))
+    b_t.pack(padx=5, pady=5)
 
+    b_t1 = customtkinter.CTkButton(frame2,text = "Sastojci recepta",command = lambda:l_t.configure(text = info_recipe()))
+    b_t1.pack(padx=5, pady=5)
+
+    b1_t1 = customtkinter.CTkButton(frame2,text = "Dodaj recept",command=lambda:dodaj_recept())
+    b1_t1.pack(padx=5, pady=5)
+
+    b2_t1 = customtkinter.CTkButton(frame2,text = "Recept - kalorije",command=lambda:l_t.configure(text = rec.ocitaj_kalorije_recept(select_value())))
+    b2_t1.pack(padx=5, pady=5)
+
+    b3_t1 = customtkinter.CTkButton(frame2,text = "Svi recepti - kalorije",command=lambda:l_t.configure(text = rec.ocitaj_kalorije_svi_recepti()))
+    b3_t1.pack(padx=5, pady=5)
+
+    l_t = customtkinter.CTkLabel(frame3,text = "")
+    l_t.pack(padx=5, pady=5)
+#--------------------------------------------------------------------------------------------------------------------------------------------------------------#
     for index,row in rec.recepti_df.iterrows():
         row_text = row[0]
 
         listbox.insert(tk.END, row_text)
-# ------------------------------------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------------------------------------------------------------#
     def delete_selected():
         selected_indices = listbox.curselection()
         if selected_indices:
@@ -48,14 +66,14 @@ def list_box_recept():
             selected_value = listbox.get(selected_recipe)
             print(selected_value)
             rec.obrisi_recept(selected_value)
-# ------------------------------------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------------------------------------------------------------#
     def select_value():
         selected_indices = listbox.curselection()
         if selected_indices:
             selected_recipe = selected_indices[0]  # Assuming only one item is selected
             selected_value = listbox.get(selected_recipe)
             return selected_value
-# ------------------------------------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------------------------------------------------------------#
     def info_recipe():
         selected_indices = listbox.curselection()
         print(selected_indices)
@@ -66,7 +84,7 @@ def list_box_recept():
             celi_recept =(rec.recepti_df[rec.recepti_df["nazivrecepta"] == selected_value])
             celi_recept.dropna(axis = 1,inplace = True)
             return celi_recept.iloc[0]
-# ------------------------------------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------------------------------------------------------------#
     def dodaj_recept():
         t1 = customtkinter.CTkToplevel(root)
         t1.geometry("800x550")
@@ -113,7 +131,7 @@ def list_box_recept():
 
         # def get_widget_values():
         #     return [x.get() for x in entries]
-# ------------------------------------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------------------------------------------------------------#
         def add_entry():
             
             frame = customtkinter.CTkFrame(t1,fg_color = "transparent")
@@ -133,24 +151,45 @@ def list_box_recept():
             entries.append(new_combobox_unit)
             entries.append(new_e2_t)
 #--------------------------------------------------------------------------------------------------------------------------------------------------------------#
-    b_t = customtkinter.CTkButton(frame2,text = "Obrisi recept",command = lambda:rec.obrisi_recept(delete_selected()))
-    b_t.pack(padx=5, pady=5)
+#--------------------------------------------------------------------------------------------------------------------------------------------------------------#
+#--------------------------------------------------------------------------------------------------------------------------------------------------------------#
+def namirnice():
+    t2 = customtkinter.CTkToplevel(root)
+    t2.geometry("650x350")
 
-    b_t1 = customtkinter.CTkButton(frame2,text = "Sastojci recepta",command = lambda:l_t.configure(text = info_recipe()))
-    b_t1.pack(padx=5, pady=5)
+    frame1 = customtkinter.CTkFrame(t2,fg_color = "transparent",width=20,height=20)
+    frame1.place(relx = 0,rely = 0)
+        
+    listbox_nam = tk.Listbox(frame1, selectmode=tk.MULTIPLE,width=20)
+    listbox_nam.pack()
 
-    b1_t1 = customtkinter.CTkButton(frame2,text = "Dodaj recept",command=lambda:dodaj_recept())
-    b1_t1.pack(padx=5, pady=5)
+    for index,row in rec.namirnice_df.iterrows():
+        row_text = row[0]
+        listbox_nam.insert(tk.END, row_text)
 
-    b2_t1 = customtkinter.CTkButton(frame2,text = "Recept - kalorije",command=lambda:l_t.configure(text = rec.ocitaj_kalorije_recept(select_value())))
-    b2_t1.pack(padx=5, pady=5)
+    frame2 = customtkinter.CTkFrame(t2,fg_color = "transparent",width=200,height=200)
+    frame2.place(relx = 0.45,rely=0)
 
-    b3_t1 = customtkinter.CTkButton(frame2,text = "Svi recepti - kalorije",command=lambda:l_t.configure(text = rec.ocitaj_kalorije_svi_recepti()))
-    b3_t1.pack(padx=5, pady=5)
+    frame3 = customtkinter.CTkFrame(t2,fg_color = "transparent",width=200,height=200)
+    frame3.place(relx = 0,rely=0.5)
 
-    l_t = customtkinter.CTkLabel(frame3,text = "")
-    l_t.pack(padx=5, pady=5)
-# ------------------------------------------------------------------------------------------------------------------------------
+    b_t2 = customtkinter.CTkButton(frame2,text = "Obrisi namirnicu")
+    b_t2.pack(padx=5, pady=5)
+
+    b_t2 = customtkinter.CTkButton(frame2,text = "Dodaj namirnicu")
+    b_t2.pack(padx=5, pady=5)
+
+    b1_t2 = customtkinter.CTkButton(frame2,text = "Kalorije - namirnica")
+    b1_t2.pack(padx=5, pady=5)
+
+    b2_t2 = customtkinter.CTkButton(frame2,text = "Kalorije - sve namirnice")
+    b2_t2.pack(padx=5, pady=5)
+
+    l_t2 = customtkinter.CTkLabel(frame3,text = "")
+    l_t2.pack(padx=5, pady=5)
+
+
+
 
 
 
@@ -159,6 +198,6 @@ def list_box_recept():
     
 
 
-    listbox.pack()
+    
 
 root.mainloop()

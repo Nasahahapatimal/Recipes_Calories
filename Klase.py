@@ -256,6 +256,6 @@ rec.lista_svega()
 # print(rec.potvrda())
 rec.list_box_recepti()
 
-print(rec.recepti_df)
+# print(rec.recepti_df)
 # print(list(set(rec.namirnice_df["jedinicamere"].to_list())))
-# print(rec.namirnice_df)
+print(rec.namirnice_df)
