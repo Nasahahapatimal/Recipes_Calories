@@ -5,7 +5,7 @@ import pyautogui as pg1
 import customtkinter
 import tkinter as tk
 from tkinter import END
-
+import openpyxl
 
 class Recepti:
 
@@ -239,3 +239,6 @@ class Recepti:
         
 rec = Recepti()
 rec.import_from_sql()
+
+# rec.export_to_xlsx_recepti()
+# rec.export_to_xlsx_namirnice()

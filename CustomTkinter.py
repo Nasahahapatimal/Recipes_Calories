@@ -275,7 +275,7 @@ def export():
     frame1 = customtkinter.CTkFrame(t4,fg_color = "transparent",width=20,height=20)
     frame1.pack(side="top", padx=5, pady=5)
 
-    b_t4 = customtkinter.CTkButton(frame1,text = "Export to .xlsx - Recepti",command=lambda:[rec.export_to_xlsx_recepti()])
+    b_t4 = customtkinter.CTkButton(frame1,text = "Export to .xlsx - Recepti",command=lambda:rec.export_to_xlsx_recepti())
     b_t4.pack(padx=5, pady=5)
 
     b1_t4 = customtkinter.CTkButton(frame1,text = "Export to .xlsx - Namirnice",command=lambda:rec.export_to_xlsx_namirnice())
